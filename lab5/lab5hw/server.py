@@ -150,7 +150,7 @@ if __name__ == "__main__":
             client_thread.daemon = True
             client_thread.start()
     except KeyboardInterrupt:
-        print("Shutting down the server.")
+        print("EXIT.")
     except Exception as e:
         print(f"Server error: {e}")
     finally:
