@@ -3,6 +3,8 @@ import socket
 import json
 import os
 import uuid
+RESET = "\033[0m"
+GREEN = "\033[92m"
 
 
 class ChatClient:
@@ -66,7 +68,7 @@ class ChatClient:
                             except socket.timeout:
                                 break
 
-                    print(f"File {file_name} has been downloaded successfully to {os.path.join(self.CLIENT_DIR, file_name)}.")
+                    print(f"File {file_name} - downloaded successfully in {os.path.join(self.CLIENT_DIR, file_name)}.")
                     file_name = None
                     is_file = False
                     self.client_socket.settimeout(None)
@@ -98,6 +100,7 @@ class ChatClient:
     def run(self):
         try:
             while True:
+                print(GREEN + "Choose your next action: 1. upload:  2. download:  3. exit" + RESET)
                 text = input()
                 if text.lower() == 'exit':
                     break

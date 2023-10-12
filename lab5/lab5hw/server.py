@@ -7,6 +7,7 @@ HOST = '127.0.0.1'
 PORT = 8080
 ServerMedia = 'ServerMedia'
 
+# create ServerMedia directory if it doesnt exist
 if not os.path.exists(ServerMedia):
     os.makedirs(ServerMedia)
 
@@ -73,8 +74,8 @@ def download_file(client_socket, file_name, client_name, client_room):
 
 
 def handle_client(client_socket, client_address):
-    global clients, rooms
-    client_name = ""
+    global clients, rooms  # access global client and room lists
+    client_name = ""  # initialize client name to an empty string
     client_room = ""
 
     while True:
@@ -87,6 +88,7 @@ def handle_client(client_socket, client_address):
             print(f"Received: {message_json}")
 
             if message_data["type"] == "connect":
+                # extract client name and room information from the received message
                 client_name = message_data["payload"]["name"]
                 client_room = message_data["payload"]["room"]
                 clients_in_room = rooms.get(client_room, [])
@@ -97,9 +99,10 @@ def handle_client(client_socket, client_address):
                 client_socket.send(ack_message.encode('utf-8'))
                 print(f"{client_name} connected to room {client_room}")
 
-                notification = format_message("notification", {"message": f"{client_name} has joined the room."})
+                notification = format_message("notification", {"message": f"{client_name} - joined the room."})
                 for client in clients_in_room:
                     if client != client_socket:
+                        # notify other clients in the room about the new client arrival
                         client.send(notification.encode('utf-8'))
 
             elif message_data["type"] == "message":
